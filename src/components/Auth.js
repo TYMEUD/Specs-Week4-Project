@@ -1,25 +1,28 @@
 import {useState} from 'react'
 import axios from 'axios'
-
+import { useContext } from 'react'
+import AuthContext from '../store/authContext'
 
 
 const Auth = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [register, setRegister] = useState(true)
-
-
-const submitHandler = e => {
-    e.preventDefault()
-
-    const body = {
-        username,
-        password
-    }
-
-    const url = 'https://socialmtn.devmountain.com'
-
-    axios.post(register ? `${url}/register` : `${url}/login`, body)
+    
+    const authCtx = useContext(AuthContext)
+    
+    
+    const submitHandler = e => {
+        e.preventDefault()
+        
+        const body = {
+            username,
+            password
+        }
+        
+        const url = 'https://socialmtn.devmountain.com'
+        
+        axios.post(register ? `${url}/register` : `${url}/login`, body)
         .then(({data}) => {
             console.log('AFTER AUTH', data)
         })
@@ -27,12 +30,14 @@ const submitHandler = e => {
             setPassword('')
             setUsername('')
         })
+        
+        authCtx.login(res.data.token, res.data.exp, res.data.userId)
 }
+
     
-    
-    
-   return (
-       <main>
+
+return (
+    <main>
            <h1>Welcome!</h1>
            <form className='form auth-form' onSubmit={submitHandler}>
                <input 
@@ -55,5 +60,5 @@ const submitHandler = e => {
        </main>
    )
 }
- 
+
 export default Auth
