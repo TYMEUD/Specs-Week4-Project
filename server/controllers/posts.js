@@ -1,3 +1,7 @@
+const {Post} = require('../models/post')
+const {User} = require('../models/user')
+
+
 module.exports = {
     getAllPosts: async (req, res) => {
         try {
